@@ -1,0 +1,10 @@
+{
+  "name": "drupal/entity_pilot_err",
+  "type": "drupal-module",
+  "description": "Provides integration between entity_pilot and the entity_reference_revisions module.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://github.com/acbramley/entity_pilot_err",
+  "minimum-stability": "dev",
+  "require": { }
+}

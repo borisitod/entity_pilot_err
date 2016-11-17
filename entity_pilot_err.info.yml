@@ -1,0 +1,8 @@
+name: Entity Pilot ERR Integration
+type: module
+description: Provides integration between entity_pilot and the entity_reference_revisions module.
+core: 8.x
+package: Entity Pilot
+dependencies:
+  - entity_pilot
+  - entity_reference_revisions
