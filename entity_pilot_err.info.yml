@@ -6,3 +6,5 @@ package: Entity Pilot
 dependencies:
   - entity_pilot
   - entity_reference_revisions
+test_dependencies:
+  - paragraphs
