@@ -1,0 +1,6 @@
+services:
+  entity_pilot_err.normalizer.entity_reference_revisions_item.hal:
+    class: Drupal\entity_pilot_err\Normalizer\EntityReferenceRevisionItemNormalizer
+    arguments: ['@rest.link_manager', '@entity_pilot.resolver.unsaved_uuid', '@serializer.normalizer.entity_reference_revision_item']
+    tags:
+      - { name: normalizer, priority: 30 }
