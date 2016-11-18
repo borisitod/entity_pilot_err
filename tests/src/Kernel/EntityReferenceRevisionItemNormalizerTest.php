@@ -53,9 +53,9 @@ class EntityReferenceRevisionItemNormalizerTest extends KernelTestBase {
   }
 
   /**
-   * Tests the revision of paragraphs.
+   * Tests the normalization of nodes with paragraph references.
    */
-  public function testParagraphsRevisions() {
+  public function testNormalization() {
     // Create the paragraph type.
     $paragraph_id = 'test_text';
     $paragraph_type = ParagraphsType::create([
