@@ -113,6 +113,7 @@ install:
   - drupal-ti install
 
 before_script:
+  - composer require "defuse/php-encryption:~1.2"
   - drupal-ti before_script
 
 script:
