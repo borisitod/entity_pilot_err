@@ -2,101 +2,37 @@
 
 namespace Drupal\Tests\entity_pilot_err\Kernel;
 
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
-use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\paragraphs\Entity\ParagraphsType;
-use Drupal\KernelTests\KernelTestBase;
 
 /**
- * Tests the ERR composite relationship upgrade path.
+ * Tests the ERR normalization via uuids.
  *
- * @group paragraphs
+ * @group entity_pilot_err
  */
-class EntityReferenceRevisionItemNormalizerTest extends KernelTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = [
-    'entity_pilot_err',
-    'entity_pilot',
-    'paragraphs',
-    'entity_reference_revisions',
-    'serialization',
-    'rest',
-    'hal',
-    'node',
-    'user',
-    'system',
-    'field',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    // Create paragraphs and article content types.
-    $values = ['type' => 'article', 'name' => 'Article'];
-    $node_type = NodeType::create($values);
-    $node_type->save();
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('node');
-    $this->installEntitySchema('paragraph');
-    $this->installSchema('node', ['node_access']);
-  }
+class EntityReferenceRevisionItemNormalizerTest extends EntityPilotErrKernelTestBase {
 
   /**
    * Tests the normalization of nodes with paragraph references.
    */
   public function testNormalization() {
-    // Create the paragraph type.
-    $paragraph_id = 'test_text';
-    $paragraph_type = ParagraphsType::create([
-      'label' => 'Test text',
-      'id' => $paragraph_id,
-    ]);
-    $paragraph_type->save();
-    $node_para_field = 'node_paragraph_field';
-    $field_storage = FieldStorageConfig::create([
-      'field_name' => $node_para_field,
-      'entity_type' => 'node',
-      'type' => 'entity_reference_revisions',
-      'cardinality' => '-1',
-      'settings' => [
-        'target_type' => 'paragraph',
-      ],
-    ]);
-    $field_storage->save();
-    $field = FieldConfig::create([
-      'field_storage' => $field_storage,
-      'bundle' => 'article',
-    ]);
-    $field->save();
-
     // Create paragraphs, cloning before saving so that when the unsaved uuid
     // resolver returns the clones, they are saved along with the node.
     $paragraph1 = Paragraph::create([
       'title' => 'Paragraph',
-      'type' => $paragraph_id,
+      'type' => self::PARAGRAPH_TYPE,
     ]);
     $clone_p_1 = clone $paragraph1;
     $paragraph1->save();
     $paragraph2 = Paragraph::create([
       'title' => 'Paragraph',
-      'type' => $paragraph_id,
+      'type' => self::PARAGRAPH_TYPE,
     ]);
     $clone_p_2 = clone $paragraph2;
     $paragraph2->save();
     $paragraph3 = Paragraph::create([
       'title' => 'Paragraph',
-      'type' => $paragraph_id,
+      'type' => self::PARAGRAPH_TYPE,
     ]);
     $clone_p_3 = clone $paragraph3;
     $paragraph3->save();
@@ -105,14 +41,14 @@ class EntityReferenceRevisionItemNormalizerTest extends KernelTestBase {
     $node = Node::create([
       'title' => $this->randomMachineName(),
       'type' => 'article',
-      $node_para_field => [$paragraph1, $paragraph2, $paragraph3],
+      self::NODE_PARA_FIELD => [$paragraph1, $paragraph2, $paragraph3],
     ]);
     $node->save();
 
     // Normalize the node and test we can denormalize.
     $serializer = $this->container->get('serializer');
     $link_manager = $this->container->get('rest.link_manager');
-    $field_uri = $link_manager->getRelationUri('node', 'article', $node_para_field, []);
+    $field_uri = $link_manager->getRelationUri('node', 'article', self::NODE_PARA_FIELD, []);
 
     $normalized = $serializer->normalize($node, 'hal_json');
     // Change the revision ids to something else to prove it is the uuid
@@ -140,7 +76,7 @@ class EntityReferenceRevisionItemNormalizerTest extends KernelTestBase {
     /** @var \Drupal\node\NodeInterface $denormalized */
     $denormalized = $serializer->denormalize($normalized, Node::class, 'hal_json');
     $denormalized->save();
-    $entities = $denormalized->{$node_para_field}->referencedEntities();
+    $entities = $denormalized->{self::NODE_PARA_FIELD}->referencedEntities();
 
     $this->assertEquals($paragraph1_uuid, $entities[0]->uuid());
     $this->assertEquals($paragraph2_uuid, $entities[1]->uuid());
