@@ -9,6 +9,8 @@ use Drupal\paragraphs\Entity\Paragraph;
  * Tests the ERR normalization via uuids.
  *
  * @group entity_pilot_err
+ *
+ * @requires module paragraphs
  */
 class EntityReferenceRevisionItemNormalizerTest extends EntityPilotErrKernelTestBase {
 

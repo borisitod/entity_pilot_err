@@ -9,6 +9,8 @@ use Drupal\paragraphs\Entity\Paragraph;
  * Tests the paragraph parent id normalization.
  *
  * @group entity_pilot_err
+ *
+ * @requires module paragraphs
  */
 class ParagraphNormalizerTest extends EntityPilotErrKernelTestBase {
 
