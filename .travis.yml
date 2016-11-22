@@ -104,16 +104,17 @@ mysql:
 before_install:
   - composer self-update
   - composer global require "lionsad/drupal_ti:1.*"
-  - composer require "defuse/php-encryption:~1.2"
+  # Can be removed when https://www.drupal.org/node/2597778 is fixed
+  - composer global require "defuse/php-encryption:~1.2"
   # Can be removed after https://github.com/LionsAd/drupal_ti/pull/37 is merged.
   - drupal-ti --include .travis-before-install-script.sh
-  -
   - drupal-ti before_install
 
 install:
   - drupal-ti install
 
 before_script:
+  - drupal-ti --include ".travis-before-script.sh"
   - drupal-ti before_script
 
 script:

@@ -15,8 +15,5 @@
   "require": {
       "drupal/entity_pilot": "^1.0",
       "drupal/entity_reference_revisions": "^1.0"
-  },
-  "require-dev": {
-      "drupal/paragraphs": "^1.0"
   }
 }
