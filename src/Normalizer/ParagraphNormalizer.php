@@ -3,12 +3,10 @@
 namespace Drupal\entity_pilot_err\Normalizer;
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\entity_pilot\EntityResolver\UnsavedUuidResolverInterface;
-use Drupal\entity_pilot\Normalizer\EntityStub;
 use Drupal\hal\Normalizer\ContentEntityNormalizer;
 use Drupal\rest\LinkManager\LinkManagerInterface;
 use Drupal\serialization\EntityResolver\UuidReferenceInterface;
