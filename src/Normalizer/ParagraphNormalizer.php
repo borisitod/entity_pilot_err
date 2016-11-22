@@ -60,7 +60,6 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
       foreach ($normalized['parent_id'] as $key => $value) {
         try {
           if ($target_entity = $this->entityManager->getStorage($normalized['parent_type'][$key]['value'])->load($value['value'])) {
-            $normalized = $this->embedEntity($entity, $format, $context, $target_entity, $normalized, self::PSUEDO_FIELD_NAME);
             $normalized['parent_id'][$key] += [
               'target_uuid' => $target_entity->uuid(),
             ];
@@ -99,52 +98,6 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
     }
     $entity = parent::denormalize($data, $class, $format, $context);
     return $entity;
-  }
-
-  /**
-   * Embeds an entity in the normalized data.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity being serialized.
-   * @param string $format
-   *   The serialization format.
-   * @param array $context
-   *   Serializer context.
-   * @param \Drupal\Core\Entity\EntityInterface $target_entity
-   *   Entity being embedded.
-   * @param array $normalized
-   *   Current normalized values.
-   * @param string $embedded_field_name
-   *   Field name to embed the entity using.
-   *
-   * @return array
-   *   Updated normalized values.
-   */
-  protected function embedEntity(EntityInterface $entity, $format, array $context, EntityInterface $target_entity, array $normalized, $embedded_field_name) {
-    // If the parent entity passed in a langcode, unset it before
-    // normalizing the target entity. Otherwise, untranslatable fields
-    // of the target entity will include the langcode.
-    $langcode = isset($context['langcode']) ? $context['langcode'] : NULL;
-    unset($context['langcode']);
-    $context['included_fields'] = ['uuid'];
-
-    // Normalize the target entity.
-    $embedded = $this->serializer->normalize($target_entity, $format, $context);
-    $link = $embedded['_links']['self'];
-    // If the field is translatable, add the langcode to the link
-    // relation object. This does not indicate the language of the
-    // target entity.
-    if ($langcode) {
-      $embedded['lang'] = $link['lang'] = $langcode;
-    }
-
-    // The returned structure will be recursively merged into the
-    // normalized entity so that the items are properly added to the
-    // _links and _embedded objects.
-    $embedded_field_uri = $this->linkManager->getRelationUri($entity->getEntityTypeId(), $entity->bundle(), $embedded_field_name, $context);
-    $normalized['_links'][$embedded_field_uri] = [$link];
-    $normalized['_embedded'][$embedded_field_uri] = [$embedded];
-    return $normalized;
   }
 
 }
