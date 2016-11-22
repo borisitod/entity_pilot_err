@@ -5,15 +5,5 @@
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
   "homepage": "https://github.com/acbramley/entity_pilot_err",
-  "minimum-stability": "dev",
-  "repositories": [
-      {
-       "type": "composer",
-       "url": "https://packages.drupal.org/8"
-      }
-  ],
-  "require": {
-      "drupal/entity_pilot": "^1.0",
-      "drupal/entity_reference_revisions": "^1.0"
-  }
+  "minimum-stability": "dev"
 }
