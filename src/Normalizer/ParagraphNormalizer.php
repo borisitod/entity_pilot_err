@@ -3,12 +3,13 @@
 namespace Drupal\entity_pilot_err\Normalizer;
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\entity_pilot\EntityResolver\UnsavedUuidResolverInterface;
 use Drupal\hal\Normalizer\ContentEntityNormalizer;
-use Drupal\rest\LinkManager\LinkManagerInterface;
+use Drupal\hal\LinkManager\LinkManagerInterface;
 use Drupal\serialization\EntityResolver\UuidReferenceInterface;
 
 /**
@@ -45,8 +46,8 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
   /**
    * {@inheritdoc}
    */
-  public function __construct(LinkManagerInterface $link_manager, EntityManagerInterface $entity_manager, ModuleHandlerInterface $module_handler, UnsavedUuidResolverInterface $unsaved_uuid, UuidReferenceInterface $uuid_reference) {
-    parent::__construct($link_manager, $entity_manager, $module_handler);
+  public function __construct(LinkManagerInterface $link_manager, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, EntityTypeRepositoryInterface $entity_type_repository, EntityFieldManagerInterface $entity_field_manager, UnsavedUuidResolverInterface $unsaved_uuid, UuidReferenceInterface $uuid_reference) {
+    parent::__construct($link_manager, $entity_type_manager, $module_handler, $entity_type_repository, $entity_field_manager);
     $this->unsavedUuid = $unsaved_uuid;
     $this->uuidReference = $uuid_reference;
   }

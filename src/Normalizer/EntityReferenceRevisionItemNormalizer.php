@@ -8,7 +8,7 @@
 namespace Drupal\entity_pilot_err\Normalizer;
 
 use Drupal\entity_reference_revisions\Normalizer\EntityReferenceRevisionItemNormalizer as BaseEntityReferenceRevisionItemNormalizer;
-use Drupal\rest\LinkManager\LinkManagerInterface;
+use Drupal\hal\LinkManager\LinkManagerInterface;
 use Drupal\serialization\EntityResolver\EntityResolverInterface;
 
 /**

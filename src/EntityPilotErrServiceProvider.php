@@ -22,9 +22,11 @@ class EntityPilotErrServiceProvider implements ServiceModifierInterface {
     if (isset($modules['paragraphs'])) {
       // Add a normalizer service for paragraph entities.
       $service_definition = new Definition('Drupal\entity_pilot_err\Normalizer\ParagraphNormalizer', array(
-        new Reference('rest.link_manager'),
-        new Reference('entity.manager'),
+        new Reference('hal.link_manager'),
+        new Reference('entity_type.manager'),
         new Reference('module_handler'),
+        new Reference('entity_type.repository'),
+        new Reference('entity_field.manager'),
         new Reference('entity_pilot.resolver.unsaved_uuid'),
         new Reference('serializer.normalizer.entity_reference_item.hal'),
       ));
