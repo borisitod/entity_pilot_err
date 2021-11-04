@@ -60,7 +60,7 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
     if (isset($normalized['parent_id']) && is_array($normalized['parent_id'])) {
       foreach ($normalized['parent_id'] as $key => $value) {
         try {
-          if ($target_entity = $this->entityManager->getStorage($normalized['parent_type'][$key]['value'])->load($value['value'])) {
+          if ($target_entity = $this->entityTypeManager->getStorage($normalized['parent_type'][$key]['value'])->load($value['value'])) {
             $normalized['parent_id'][$key] += [
               'target_uuid' => $target_entity->uuid(),
             ];
@@ -91,7 +91,7 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
           if ($entity = $this->unsavedUuid->resolve($this->uuidReference, $uuid, $entity_type_id)) {
             $data['parent_id'][$key]['value'] = $entity->id();
           }
-          if ($entity = $this->entityManager->loadEntityByUuid($entity_type_id, $value['target_uuid'])) {
+          if ($entity = $this->entityTypeManager->loadEntityByUuid($entity_type_id, $value['target_uuid'])) {
             $data['parent_id'][$key]['value'] = $entity->id();
           }
         }
