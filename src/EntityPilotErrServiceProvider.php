@@ -27,6 +27,7 @@ class EntityPilotErrServiceProvider implements ServiceModifierInterface {
         new Reference('module_handler'),
         new Reference('entity_type.repository'),
         new Reference('entity_field.manager'),
+        new Reference('entity.repository'),
         new Reference('entity_pilot.resolver.unsaved_uuid'),
         new Reference('serializer.normalizer.entity_reference_item.hal'),
       ));

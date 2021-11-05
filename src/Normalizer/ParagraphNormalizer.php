@@ -4,6 +4,7 @@ namespace Drupal\entity_pilot_err\Normalizer;
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -46,8 +47,9 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
   /**
    * {@inheritdoc}
    */
-  public function __construct(LinkManagerInterface $link_manager, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, EntityTypeRepositoryInterface $entity_type_repository, EntityFieldManagerInterface $entity_field_manager, UnsavedUuidResolverInterface $unsaved_uuid, UuidReferenceInterface $uuid_reference) {
+  public function __construct(LinkManagerInterface $link_manager, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, EntityTypeRepositoryInterface $entity_type_repository, EntityFieldManagerInterface $entity_field_manager, EntityRepositoryInterface $entity_repository, UnsavedUuidResolverInterface $unsaved_uuid, UuidReferenceInterface $uuid_reference) {
     parent::__construct($link_manager, $entity_type_manager, $module_handler, $entity_type_repository, $entity_field_manager);
+    $this->entityRepository = $entity_repository;
     $this->unsavedUuid = $unsaved_uuid;
     $this->uuidReference = $uuid_reference;
   }
@@ -91,7 +93,7 @@ class ParagraphNormalizer extends ContentEntityNormalizer {
           if ($entity = $this->unsavedUuid->resolve($this->uuidReference, $uuid, $entity_type_id)) {
             $data['parent_id'][$key]['value'] = $entity->id();
           }
-          if ($entity = $this->entityTypeManager->loadEntityByUuid($entity_type_id, $value['target_uuid'])) {
+          if ($entity = $this->entityRepository->loadEntityByUuid($entity_type_id, $value['target_uuid'])) {
             $data['parent_id'][$key]['value'] = $entity->id();
           }
         }
